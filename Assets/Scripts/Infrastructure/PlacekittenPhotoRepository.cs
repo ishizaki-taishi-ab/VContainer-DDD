@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Domain;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Infrastructure
@@ -19,6 +20,11 @@ namespace Infrastructure
             UnityWebRequest request = UnityWebRequestTexture.GetTexture($"http://placekitten.com/{photoResolution}");
 
             await request.SendWebRequest();
+
+            if (request.isNetworkError || request.isHttpError)
+            {
+                Debug.LogError(request.error);
+            }
 
             return new PhotoData(((DownloadHandlerTexture) request.downloadHandler).texture);
         }
